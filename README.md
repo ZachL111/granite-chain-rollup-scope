@@ -1,68 +1,40 @@
 # granite-chain-rollup-scope
 
-`granite-chain-rollup-scope` is a focused C codebase around implement a C blockchain tooling project for rollup event replay, using fixture event logs and golden state snapshots. It is meant to be easy to inspect, run, and extend without a hosted service.
+`granite-chain-rollup-scope` keeps a focused C implementation around blockchain tooling. The project goal is to implement a C blockchain tooling project for rollup event replay, using fixture event logs and golden state snapshots.
 
-## Granite Chain Rollup Scope Walkthrough
+## Why It Exists
 
-I would read the project from the outside in: command, fixture, model, then roadmap. That keeps the blockchain tooling idea grounded in files that can be checked locally.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## How It Is Put Together
+## Granite Chain Rollup Scope Review Notes
 
-The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The C implementation keeps headers, source, and assertions separate so bounds and types are easy to review.
+Start with `event finality` and `event finality`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Reason For The Project
+## Features
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+- `fixtures/domain_review.csv` adds cases for event finality and nonce pressure.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/granite-chain-rollup-walkthrough.md` walks through the case spread.
+- The C code includes a review path for `event finality` and `event finality`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Capabilities
+## Architecture Notes
 
-- Uses fixture data to keep event replay changes visible in code review.
-- Includes extended examples for invariant checks, including `surge` and `degraded`.
-- Documents settlement rules tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The core code exposes a scoring path and the added review layer uses `signal`, `slack`, `drag`, and `confidence`. The domain terms are `event finality`, `nonce pressure`, `settlement risk`, and `proof depth`.
 
-## Data Notes
+The C addition stays small enough to inspect in one sitting.
 
-`recovery` is the first example I would inspect because it lands on the `accept` path with a score of 258. The broader file also keeps `degraded` at 49 and `surge` at 263, which gives the model a useful low-to-high spread.
-
-## Where Things Live
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Getting It Running
-
-Use a normal shell with C available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Command Examples
+## Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Tests
 
-## Check The Work
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Limitations And Roadmap
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Tradeoffs
-
-The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
-
-## Possible Extensions
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more blockchain tooling fixture that focuses on a malformed or borderline input.
+No external service is required. A deeper version would add more negative cases and a clearer boundary around invalid input.

@@ -1,0 +1,73 @@
+{
+  "repo": "granite-chain-rollup-scope",
+  "language": "C",
+  "category": "Blockchain tooling",
+  "goal": "Implement a C blockchain tooling project for rollup event replay, using fixture event logs and golden state snapshots.",
+  "review_model": {
+    "terms": [
+      "event finality",
+      "nonce pressure",
+      "settlement risk",
+      "proof depth"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "event finality",
+      "signal": 42,
+      "slack": 49,
+      "drag": 11,
+      "confidence": 46,
+      "score": 146,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "nonce pressure",
+      "signal": 43,
+      "slack": 30,
+      "drag": 10,
+      "confidence": 70,
+      "score": 156,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "settlement risk",
+      "signal": 81,
+      "slack": 29,
+      "drag": 26,
+      "confidence": 63,
+      "score": 176,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "proof depth",
+      "signal": 58,
+      "slack": 46,
+      "drag": 14,
+      "confidence": 49,
+      "score": 169,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "event finality",
+      "signal": 78,
+      "slack": 41,
+      "drag": 26,
+      "confidence": 58,
+      "score": 177,
+      "lane": "ship"
+    }
+  ]
+}
